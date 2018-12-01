@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configure id="reloadSslKeys" class="com.bb.reload_ssl_keys.ReloadSslKeysModule">
+  <Set name="SslContextFactory"><Ref refid="sslContextFactory"/></Set>
+</Configure>
