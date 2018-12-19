@@ -121,7 +121,7 @@ public class FileWatcherTest {
                 FileWatcherTest.touchFile(m_testFile);
                 m_currentNumPasses++;
             } else {
-                System.out.println("Notifying waiters");
+                System.out.println("Notifying watchers");
                 this.notifyAll();
             }
         }
@@ -135,6 +135,7 @@ public class FileWatcherTest {
 
     @Test
     public void testOnePass() {
+        long callbackDelay = 0L;
         int numPasses = 1;
         
         try {
@@ -155,7 +156,7 @@ public class FileWatcherTest {
                     e.printStackTrace();
                     Assert.fail("Unexpected exception touching file: " + e.getMessage());
                 }
-            });
+            }, callbackDelay);
 
             //
             // Initiate the sequence by touching the file the first time
@@ -176,6 +177,7 @@ public class FileWatcherTest {
 
     @Test
     public void testTwoPasses() {
+        long callbackDelay = 0L;
         int numPasses = 2;
         
         try {
@@ -196,7 +198,7 @@ public class FileWatcherTest {
                     e.printStackTrace();
                     Assert.fail("Unexpected exception touching file: " + e.getMessage());
                 }
-            });
+            }, callbackDelay);
 
             //
             // Initiate the sequence by touching the file the first time
@@ -217,6 +219,7 @@ public class FileWatcherTest {
 
     @Test
     public void testThreePasses() {
+        long callbackDelay = 0L;
         int numPasses = 3;
         
         try {
@@ -237,7 +240,133 @@ public class FileWatcherTest {
                     e.printStackTrace();
                     Assert.fail("Unexpected exception touching file: " + e.getMessage());
                 }
-            });
+            }, callbackDelay);
+
+            //
+            // Initiate the sequence by touching the file the first time
+            //
+            controller.touchFile();
+
+            // Stop the watcher
+            controller.waitOnTestCompletion();
+            watcher.stopWatcher();
+            
+            // Verify the change count
+            Assert.assertEquals("Wrong number of changes", numPasses, controller.getObservedCount());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Assert.fail("Caught an unexpected exception: " + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testOnePass_Delay1() {
+        long callbackDelay = 1L;
+        int numPasses = 1;
+        
+        try {
+            // Configure the test file and controller
+            File testFile = new File(TEST_PATH_BASE + TEST_FILE_NAME);
+            FileWatcherTest.createFile(testFile);
+
+            final TestControlClass controller = new TestControlClass(numPasses, testFile);
+            
+            // Setup the watcher
+            Path filePath = FileSystems.getDefault().getPath(testFile.getAbsolutePath());
+            FileWatcher watcher = new FileWatcher(filePath, () -> {
+                controller.incrementObservedCount();
+                
+                try {
+                    controller.touchFile();
+                } catch (IOException|InterruptedException e) {
+                    e.printStackTrace();
+                    Assert.fail("Unexpected exception touching file: " + e.getMessage());
+                }
+            }, callbackDelay);
+
+            //
+            // Initiate the sequence by touching the file the first time
+            //
+            controller.touchFile();
+
+            // Stop the watcher
+            controller.waitOnTestCompletion();
+            watcher.stopWatcher();
+            
+            // Verify the change count
+            Assert.assertEquals("Wrong number of changes", numPasses, controller.getObservedCount());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Assert.fail("Caught an unexpected exception: " + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testTwoPasses_Delay1() {
+        long callbackDelay = 1L;
+        int numPasses = 2;
+        
+        try {
+            // Configure the test file and controller
+            File testFile = new File(TEST_PATH_BASE + TEST_FILE_NAME);
+            FileWatcherTest.createFile(testFile);
+
+            final TestControlClass controller = new TestControlClass(numPasses, testFile);
+            
+            // Setup the watcher
+            Path filePath = FileSystems.getDefault().getPath(testFile.getAbsolutePath());
+            FileWatcher watcher = new FileWatcher(filePath, () -> {
+                controller.incrementObservedCount();
+                
+                try {
+                    controller.touchFile();
+                } catch (IOException|InterruptedException e) {
+                    e.printStackTrace();
+                    Assert.fail("Unexpected exception touching file: " + e.getMessage());
+                }
+            }, callbackDelay);
+
+            //
+            // Initiate the sequence by touching the file the first time
+            //
+            controller.touchFile();
+
+            // Stop the watcher
+            controller.waitOnTestCompletion();
+            watcher.stopWatcher();
+            
+            // Verify the change count
+            Assert.assertEquals("Wrong number of changes", numPasses, controller.getObservedCount());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Assert.fail("Caught an unexpected exception: " + ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testThreePasses_Delay1() {
+        long callbackDelay = 1L;
+        int numPasses = 3;
+        
+        try {
+            // Configure the test file and controller
+            File testFile = new File(TEST_PATH_BASE + TEST_FILE_NAME);
+            FileWatcherTest.createFile(testFile);
+
+            final TestControlClass controller = new TestControlClass(numPasses, testFile);
+            
+            // Setup the watcher
+            Path filePath = FileSystems.getDefault().getPath(testFile.getAbsolutePath());
+            FileWatcher watcher = new FileWatcher(filePath, () -> {
+                controller.incrementObservedCount();
+                
+                try {
+                    controller.touchFile();
+                } catch (IOException|InterruptedException e) {
+                    e.printStackTrace();
+                    Assert.fail("Unexpected exception touching file: " + e.getMessage());
+                }
+            }, callbackDelay);
 
             //
             // Initiate the sequence by touching the file the first time

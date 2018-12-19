@@ -12,6 +12,13 @@ import java.nio.file.WatchService;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 
+/**
+ * The FileWatcher provides the logic for monitoring the directory containing a specified
+ * file path for changes.  When the watcher is notified of a change in the file at the specified
+ * path, then the run() method on the provided callback is executed.
+ * 
+ * @author Scott Stanley
+ */
 public class FileWatcher {
     static final Logger LOG = Log.getLogger(FileWatcher.class);
 
@@ -20,8 +27,9 @@ public class FileWatcher {
     final private WatchService m_watcher;
     private boolean m_stopped = false;
     final private Thread m_watcherThread;
+    final private Debouncer m_callbackDebouncer;
 
-    public FileWatcher(final Path filePath, final WatcherInterface callback) 
+    public FileWatcher(final Path filePath, final Runnable callback, final Long callbackDelaySeconds) 
             throws IOException {
         //
         // Configure the watcher
@@ -36,6 +44,7 @@ public class FileWatcher {
         //
         // Start the thread waiting on changes
         //
+        m_callbackDebouncer = new Debouncer(callback, callbackDelaySeconds);
         Runnable runner = () -> {
             while (! m_stopped) {
                 // Get the event key
@@ -57,7 +66,7 @@ public class FileWatcher {
                         if (modifiedPath.equals(m_fileName)) {
                             File updatedFile = m_parentDir.resolve(modifiedPath).toFile();
                             LOG.info("File modified: ", updatedFile.getAbsolutePath());
-                            callback.callback();
+                            m_callbackDebouncer.trigger();
                         }
                     }
                 }
@@ -84,14 +93,5 @@ public class FileWatcher {
             e.printStackTrace();
         }
         
-    }
-    
-    /**
-     * The watcher interface called when the watched file changes.
-     * 
-     * @author Scott Stanley
-     */
-    protected interface WatcherInterface {
-        void callback();
     }
 }

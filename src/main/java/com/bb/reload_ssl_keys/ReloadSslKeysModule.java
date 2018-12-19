@@ -9,11 +9,19 @@ import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
+/**
+ * A simple Jetty module which watches the SSL key file being used by the 
+ * SslContextFactory for changes.  When the file is modified, this module
+ * forces the SslContextFactory to reload the SSL key.
+ * 
+ * @author Scott Stanley
+ */
 public class ReloadSslKeysModule extends AbstractLifeCycle {
     static final Logger LOG = Log.getLogger(ReloadSslKeysModule.class);
     
     private SslContextFactory m_sslCtxFactory = null;
     private FileWatcher m_fileWatcher = null;
+    private Long m_reloadDelaySec = 15L;
 
 
     public ReloadSslKeysModule() {
@@ -21,6 +29,10 @@ public class ReloadSslKeysModule extends AbstractLifeCycle {
     
     public void setSslContextFactory(final SslContextFactory sslCtxFactory) {
         m_sslCtxFactory = sslCtxFactory;
+    }
+    
+    public void setReloadDelaySec(final long reloadDelaySec) {
+        m_reloadDelaySec = reloadDelaySec;
     }
     
     @Override
@@ -34,7 +46,7 @@ public class ReloadSslKeysModule extends AbstractLifeCycle {
                 } catch (Exception ex) {
                     LOG.info("Failed reloading SslCOntextFactory", ex);
                 }
-            }); 
+            }, m_reloadDelaySec); 
         }
     }
 

@@ -6,7 +6,7 @@ a reload of the SslContextFactory when the key file changes.
 ssl
 
 [lib]
-lib/reload_sslkey_module-1.0.jar
+lib/reload_sslkey_module-1.1.jar
 
 [xml]
 etc/reload-ssl-keys.xml
@@ -16,3 +16,8 @@ etc/reload-ssl-keys.xml
 [ini-template]
 ### Reload SSL Keys Configuration
 --module=reload-ssl-keys
+
+## Reload delay period (seconds).  Logic waits for a period of reloadDelaySec after the last
+## modification to the SSL key file prior to triggering the reload.  This is intended to prevent 
+## attempts to reload the file before it has completely been written.
+# reloadsslkeys.reloadDelaySec = 15
