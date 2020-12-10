@@ -15,7 +15,7 @@
       -->
     <properties>
         <build_version>1.2</build_version>
-        <jetty_version>9.4.14.v20181114</jetty_version>
+        <jetty_version>11.0.0</jetty_version>
         <junit_version>4.13.1</junit_version>
     </properties>
 
