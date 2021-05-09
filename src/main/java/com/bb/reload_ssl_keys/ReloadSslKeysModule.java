@@ -5,9 +5,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A simple Jetty module which watches the SSL key file being used by the 
@@ -17,7 +17,7 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
  * @author Scott Stanley
  */
 public class ReloadSslKeysModule extends AbstractLifeCycle {
-    static final Logger LOG = Log.getLogger(ReloadSslKeysModule.class);
+    static final Logger LOG = LoggerFactory.getLogger(ReloadSslKeysModule.class);
     
     private SslContextFactory m_sslCtxFactory = null;
     private FileWatcher m_fileWatcher = null;

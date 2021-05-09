@@ -6,7 +6,7 @@ a reload of the SslContextFactory when the key file changes.
 ssl
 
 [lib]
-lib/reload_sslkey_module-1.2.jar
+lib/reload_sslkey_module-1.3.jar
 
 [xml]
 etc/reload-ssl-keys.xml

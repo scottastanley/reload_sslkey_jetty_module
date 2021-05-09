@@ -9,8 +9,8 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The FileWatcher provides the logic for monitoring the directory containing a specified
@@ -20,7 +20,7 @@ import org.eclipse.jetty.util.log.Logger;
  * @author Scott Stanley
  */
 public class FileWatcher {
-    static final Logger LOG = Log.getLogger(FileWatcher.class);
+    static final Logger LOG = LoggerFactory.getLogger(FileWatcher.class);
 
     final private Path m_fileName;
     final private Path m_parentDir;

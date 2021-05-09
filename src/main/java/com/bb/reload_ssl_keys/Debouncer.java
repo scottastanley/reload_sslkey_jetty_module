@@ -5,8 +5,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Debouncer wraps around a simple Runnable object and provides the delay/debouncing logic 
@@ -17,7 +17,7 @@ import org.eclipse.jetty.util.log.Logger;
  * @author Scott Stanley
  */
 public class Debouncer {
-    static final Logger LOG = Log.getLogger(Debouncer.class);
+    static final Logger LOG = LoggerFactory.getLogger(Debouncer.class);
     private final ScheduledExecutorService m_exec;
     private ScheduledFuture<?> m_future = null;
     private Long m_delaySeconds;
