@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "https://www.eclipse.org/jetty/configure_10_0.dtd">
 <Configure id="reloadSslKeys" class="com.bb.reload_ssl_keys.ReloadSslKeysModule">
   <Set name="SslContextFactory"><Ref refid="sslContextFactory"/></Set>
   <Set name="ReloadDelaySec"><Property name="reloadsslkeys.reloadDelaySec" default="15" /></Set>
